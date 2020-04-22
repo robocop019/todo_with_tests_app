@@ -52,7 +52,7 @@ RSpec.describe List, type: :model do
       Task.create(name: 'Task 2', complete: true, list_id: list.id)
       Task.create(name: 'Task 3', complete: false, list_id: list.id)
 
-      expect(list.incomplete_tasks.pluck('name')).to eq(['Task 1', 'Task 3'])
+      expect(list.incomplete_tasks.pluck('name')).to match_array(['Task 1', 'Task 3'])
     end
   end
 
@@ -63,7 +63,7 @@ RSpec.describe List, type: :model do
       Task.create(name: 'Task 2', favorite: true, list_id: list.id)
       Task.create(name: 'Task 3', favorite: true, list_id: list.id)
 
-      expect(list.favorite_tasks.pluck('name')).to eq(['Task 2', 'Task 3'])
+      expect(list.favorite_tasks.pluck('name')).to match_array(['Task 2', 'Task 3'])
     end
   end
 end
