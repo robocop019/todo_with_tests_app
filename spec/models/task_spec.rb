@@ -28,4 +28,53 @@ RSpec.describe Task, type: :model do
       expect(task.favorite).to eq(true)
     end
   end
+
+  describe '#overdue?' do
+    it 'should return true if the deadline is overdue' do
+      task = Task.create(deadline: 1.hour.ago)
+      expect(task.overdue?).to eq(true)
+    end
+
+    it 'should return false if the deadline is not overdue' do
+      task = Task.create(deadline: 1.hour.from_now)
+      expect(task.overdue?).to eq(false)
+    end
+  end
+
+  describe '#increment_priority!' do
+    it 'should add 1 to the priority if the priority is less than 10' do
+      task = Task.create(priority: 5)
+      task.increment_priority!
+      expect(task.priority).to eq(6)
+    end
+
+    it 'should not add 1 to the priority if the priority is 10 or more' do
+      task = Task.create(priority: 11)
+      task.increment_priority!
+      expect(task.priority).to eq(11)
+    end
+  end
+
+  describe '#decrement_priority!' do
+    it 'should substract 1 to the priority if the priority is greater than 1' do
+      task = Task.create(priority: 5)
+      task.decrement_priority!
+      expect(task.priority).to eq(4)
+    end
+
+    it 'should not substract 1 to the priority if the priority is 1 or less' do
+      task = Task.create(priority: 1)
+      task.decrement_priority!
+      expect(task.priority).to eq(1)
+    end
+  end
+
+  describe '#snooze_hour!' do
+    it 'should add 1 hour to the deadline' do
+      time = 1.hour.from_now
+      task = Task.create(deadline: time)
+      task.snooze_hour!
+      expect(task.deadline).to eq(time + 1.hour)
+    end
+  end
 end
